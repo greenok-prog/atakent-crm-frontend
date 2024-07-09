@@ -38,8 +38,10 @@ import type { Exhibition } from '~/types/exhibition';
 import type { Visitor } from '~/types/visitor';
 
 definePageMeta({
-  layout: 'admin-layout'
+  layout: 'admin-layout',
+  middleware:'auth',
 })
+const page=  useNuxtApp()
 
 const {data:exhibitions} = await useAPI<Exhibition[]>(`/exhibitions`)
 const sortExhibition = ref('')

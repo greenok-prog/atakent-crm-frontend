@@ -1,6 +1,7 @@
 export default defineNuxtConfig({
     devtools: { enabled: true },
-    modules: ['nuxt-svgo', '@primevue/nuxt-module', '@vee-validate/nuxt', "@nuxt/image"],
+    ssr:true,
+    modules: ['nuxt-svgo', '@primevue/nuxt-module', '@vee-validate/nuxt', "@nuxt/image", '@pinia/nuxt'],
     svgo: {
       defaultImport: 'component',
     },

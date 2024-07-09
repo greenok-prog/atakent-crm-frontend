@@ -1,5 +1,5 @@
 <template>
-   <div @click="cl">
+   <div @click="">
     fdf
    </div>
 </template>
@@ -10,12 +10,5 @@ definePageMeta({
 })
 
 
-const cl = async () => {
-  const data = await $fetch('http://localhost:8000/visitors/3', {
-    responseType:'blob'
-  })
-  
-  downloadFileHandler(data)
-}
 
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div>
-      <div class="flex flex-col gap-4">
-        <AdminExhibitionField v-for="exhibition in exhibitions" :key="exhibition.id" :exhibition="exhibition" @refreshData="refreshData"/>
+      <div class="flex flex-col gap-4 max-w-1/5">
+        <AdminExhibitionField v-for="exhibition in exhibitions" :key="exhibition.id" :exhibition="exhibition"/>
         <AdminExhibitionAddField v-if="isAddExhibition" @onAdd="addExhibitionHandler" />
       </div>
       
@@ -10,12 +10,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { Exhibition } from '~/types/exhibition';
+import { useExhibitionsStore } from '~/store/exhibitions.store';
 
 definePageMeta({
   layout: 'admin-layout'
 })
-const {data:exhibitions, refresh:refreshData} = await useAPI<Exhibition[]>('/exhibitions')
+const {getExhibitions, addExhibition} = useExhibitionsStore()
+const {exhibitions} = storeToRefs(useExhibitionsStore())
+await getExhibitions()
 
 const isAddExhibition = ref(false)
 
@@ -23,16 +25,9 @@ const openAddExhibitionInput = () => {
   isAddExhibition.value = true
 }
 
-const addExhibitionHandler = async (name:string) => {
-  const {error} = await useAPI<Exhibition>('/exhibitions', {
-    method:'POST',
-    body:{
-      name
-    }
-  })
-  if(!error.value){
-    
-    refreshData()
+const addExhibitionHandler = async (data:any) => {
+  const res = await addExhibition(data)
+  if(!res.error.value){
     isAddExhibition.value = false
   }
 }

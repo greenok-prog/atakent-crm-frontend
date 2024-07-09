@@ -1,0 +1,33 @@
+<template>
+    <div>
+        <NuxtLink to="/admin/managers/add">
+            <Button label="Добавить менеджера"/>
+        </NuxtLink>
+        <DataTable :value="data">
+        <Column field="name" header="Имя"></Column>
+        <Column field="email" header="Email"></Column>
+        <Column field="roles" header="Роли"></Column>
+
+        <Column>
+            <template #body="slotProps" >
+                <div class="flex gap-2 items-center justify-end">
+                   <NuxtLink :to="`/admin/managers`"><Button icon="pi pi-pencil" /></NuxtLink>
+                <Button icon="pi pi-times" />
+                </div>
+            </template>
+        </Column>
+    </DataTable>
+    </div>
+
+</template>
+
+<script lang="ts" setup>
+definePageMeta({
+  layout: 'admin-layout',
+  middleware:['auth','admin']
+})
+
+const {data} = await useAPI('/users')
+
+
+</script>

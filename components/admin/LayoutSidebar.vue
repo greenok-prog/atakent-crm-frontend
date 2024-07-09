@@ -15,16 +15,17 @@
         </nav>
        </div>
 
-        <div class="mt-12">
+        <div class="mt-12" v-if="userIsAdmin">
             <p class="text-lg font-bold">Выставки:</p>
             <nav class="flex flex-col  mt-4">
-                <NuxtLink to="/admin/exhibitions/FIW" class="flex gap-2 p-2 items-center hover:bg-zinc-800 hover:text-white rounded group transition">
-                <SvgoStands class="h-5 group-hover:fill-white"/>
-                FIW
-            </NuxtLink>
+            
             <NuxtLink to="/admin/exhibitions" class="flex gap-2 p-2 items-center hover:bg-zinc-800 hover:text-white rounded group transition">
                 <SvgoUserGroup class="h-5 group-hover:fill-white"/>
                 Список выставок 
+            </NuxtLink>
+            <NuxtLink to="/admin/managers" class="flex gap-2 p-2 items-center hover:bg-zinc-800 hover:text-white rounded group transition">
+                <SvgoUserGroup class="h-5 group-hover:fill-white"/>
+                Пользователи
             </NuxtLink>
             </nav>
         </div>
@@ -34,7 +35,9 @@
 <script lang="ts" setup>
 import SvgoUserGroup from '@/assets/icons/user-group.svg'
 import SvgoStands from '@/assets/icons/stands.svg'
+import { useUserStore } from '~/store/user.store';
 
+const {userIsAdmin} = storeToRefs(useUserStore())
 </script>
 <style lang="scss" scoped>
 .sidebar{
