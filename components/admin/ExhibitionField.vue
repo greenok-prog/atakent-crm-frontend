@@ -9,8 +9,7 @@
           </div>
         </div>
         <div v-if="isEditing" class="flex flex-col gap-1">
-            <label>Файл билета</label>
-            <input type="file" @change="onAddFile">
+            <FileInput :file="file" @onChangeFile="onAddFile" label="Изменить фото билета"/>
         </div>
     </div>
         <Toast/>

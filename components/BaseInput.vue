@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col   ">
         <label v-if="label">{{ label }}</label>
-        <InputText v-model="model" v-bind="$attrs"/>
+        <InputText v-model="model" v-bind="$attrs" />
         <small v-show="hasError" class="text-red-500">{{ errorMessage }}</small>
     </div>
 </template>

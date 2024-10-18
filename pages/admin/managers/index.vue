@@ -12,7 +12,8 @@
             <template #body="slotProps" >
                 <div class="flex gap-2 items-center justify-end">
                    <NuxtLink :to="`/admin/managers`"><Button icon="pi pi-pencil" /></NuxtLink>
-                <Button icon="pi pi-times" />
+                    <Button @click="removeManager(slotProps.data.id)" icon="pi pi-times" />
+                    
                 </div>
             </template>
         </Column>
@@ -28,6 +29,15 @@ definePageMeta({
 })
 
 const {data} = await useAPI('/users')
-
+const removeManager = async (id:number) => {
+    const {data, error, refresh} = await useAPI(`/users/${id}`, {
+        method:'DELETE'
+    })
+    if(!error.value){
+        refresh()
+    }
+    
+    
+}
 
 </script>

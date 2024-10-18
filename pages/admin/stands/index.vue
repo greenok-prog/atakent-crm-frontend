@@ -43,11 +43,12 @@ import type { Exhibitor } from '~/types/exhibitor';
 import { FilterMatchMode } from '@primevue/core/api';
 
 definePageMeta({
-  layout: 'admin-layout'
+  layout: 'admin-layout',
+  middleware:'auth',
 })
 const toast = useToast()
 const searchField = ref('')
-const {data, refresh} = await useAPI<Exhibitor[]>(() => `/exhibitors`, {
+const {data, refresh} = await useAPI<Exhibitor[]>(`/exhibitors`, {
     
 })
 const removeItem = async (exhibitorId:number) => {

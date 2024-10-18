@@ -7,97 +7,54 @@
     </header>
    
     
-    <form action="" class="mt-12" @submit.prevent="submit">
+    <div class="flex items-center justify-center min-w-92">
+        <form action="" class="mt-12" @submit.prevent="submit">
         <h1 class="text-3xl font-bold pb-6">Регистрация участника</h1>
-        <Stepper value="1" >
-        <StepList>
-            <Step value="1"></Step>
-            <Step value="2"></Step>
-            <Step value="3"></Step>
-            <Step value="4"></Step>
-        </StepList>
-        <StepPanels>
-            <StepPanel v-slot="{ activateCallback }" value="1">
-               
-              <div class="bg-[url('/bg.svg')] bg-no-repeat bg-cover min-h-72 flex flex-col ">
-                <h2 class="text-2xl font-bold">Хуистовка</h2>
-                <span class="mt-2">Выберите выставку, на которой компания будет учавствовать</span>
+
+        <div class=" min-h-72 flex flex-col ">
+                <span class="mt-1">Выберите выставку, на которой компания будет учавствовать</span>
                 <Select v-model="exhibitionId" :options="exhibitions" optionLabel="name" optionValue="id" placeholder="Выберите выставку" class="mt-4 max-w-72"/>
-                
-              </div>
-              <div class="flex pt-6 justify-end">
-                    <Button label="Шмалее" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('2')" />
-                </div>
-            </StepPanel>
-            <StepPanel v-slot="{ activateCallback }" value="2" >
-                <div class="bg-[url('/bg.svg')] bg-no-repeat bg-cover min-h-96 bg-rigth  flex items-center">
-                    <div class="flex flex-col w-full">
-                        <h2 class="text-2xl font-bold">Информация</h2>
-                        <span class="mt-2">Заполните информацию о компании</span>
-                        <div class=' flex flex-col gap-4 mt-6  w-2/6'>
-                        <BaseInput v-model="companyName" v-bind="companyNameAttrs" :error-message="errors.companyName" placeholder="Название компании"/>
+                <div v-if="exhibitionId" class=' flex flex-col gap-4 mt-6  w-full '>
+                        <BaseInput class="w-full" v-model="companyName" v-bind="companyNameAttrs" :error-message="errors.companyName" placeholder="Название компании"/>
                         <BaseInput v-model="email" v-bind="emailAttrs" :error-message="errors.email" placeholder="Email"/>
                         <BaseInputMask v-model="companyPhone" v-bind="companyPhoneAttrs" :error-message="errors.companyPhone" placeholder="Номер телефона" />
-                        <FileInput :file="file" @onChangeFile="addFile"/>
-                    </div>
-                    </div>
+                        <FileInput :file="file" label="Загрузить логотип" @onChangeFile="addFile"/>
                 </div>
-                
-                <div class="flex pt-6 justify-between">
-                <Button label="Назад" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                <Button label="Далее" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('3')" />
-            </div>
-            </StepPanel>
-            <StepPanel v-slot="{ activateCallback }" value="3" >
-                <div class="bg-[url('/bg.svg')] bg-no-repeat bg-cover min-h-96 bg-rigth  flex items-center">
-                    <div class="flex flex-col w-full">
-                        <h2 class="text-2xl font-bold">Социальные сети</h2>
-                        <span class="mt-2">Добавьте ссылки на социальные сети</span>
-                        <div class=' flex flex-col gap-4 mt-6  w-2/6'>
+                <div class="flex flex-col w-full mt-4">
+                        <h2 class="text-2xl  font-bold">Социальные сети</h2>
+                        <span class="mt-1">Добавьте ссылки на социальные сети</span>
+                        <div class=' flex flex-col gap-4 mt-6 '>
                             <BaseInput v-model="website" v-bind="websiteAttrs" :error-message="errors.website" placeholder="Сайт"/>
-                        <BaseInput v-model="youtube" v-bind="youtubeAttrs" :error-message="errors.youtube" placeholder="Instagram"/>
-                        <BaseInput v-model="instagram" v-bind="instagramAttrs" :error-message="errors.instagram" placeholder="Youtube"/>
-                        <BaseInput v-model="facebook" v-bind="facebookAttrs" :error-message="errors.facebook" placeholder="Facebook" />
-                      
-                    </div>
-                    </div>
-                </div>
-                
-                <div class="flex pt-6 justify-between">
-                <Button label="Назад" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                <Button label="Далее" icon="pi pi-arrow-right" iconPos="right" @click="activateCallback('4')" />
-            </div>
-            </StepPanel>
-            <StepPanel v-slot="{ activateCallback }" value="4">
-                <VeeFieldArray name="employees" v-slot="{ fields, push, remove }">
-                    <Fieldset v-for="(field, idx) in fields" :key="field.key">
-                        <div class="flex justify-between items-end">
+                            <BaseInput v-model="youtube" v-bind="youtubeAttrs" :error-message="errors.youtube" placeholder="Instagram"/>
+                            <BaseInput v-model="instagram" v-bind="instagramAttrs" :error-message="errors.instagram" placeholder="Youtube"/>
+                            <BaseInput v-model="facebook" v-bind="facebookAttrs" :error-message="errors.facebook" placeholder="Facebook" />
+                        </div>
+                        
+                        <VeeFieldArray name="employees" v-slot="{ fields, push, remove }" >
+                            <div class="flex justify-between items-end" v-for="(field, idx) in fields" :key="field.key" >
                             <div class="flex gap-3">
                                 <BaseInput v-model="employees[idx].name" label="ФИО" class="w-96" reqired/>
                                 <BaseInput v-model="employees[idx].position" label="Должность" class="w-56" reqired/>
                             </div>
                             <Button v-if="!field.isFirst" icon="pi pi-times" @click="remove(idx)"/>
                         </div>
-                    </Fieldset>
+                      
+                   
                     <div class="flex">
                         <Button label="Добавить участника" icon="pi pi-plus" @click="push({name:'', position:''})" class="mt-4"/>
                     </div>
                 </VeeFieldArray>
-              
-                <div class="flex pt-6 justify-between">
-                    <Button label="Назад" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('3')" />
-                    <Button label="Сохранить" @click="submitForm()" type="submit" />
-                </div>
-            </StepPanel>
-        </StepPanels>
-
-    </Stepper>
+                    </div>
+                
+              </div>
+      
 </form>
+    </div>
    </div>
     <Toast/>
 
 
-    <footer class="h-24 drop-shadow-xl w-full border bg-black text-white text-lg font-bold flex items-center px-6">
+    <footer class="h-24 drop-shadow-xl w-full border bg-black text-white text-lg font-bold flex items-center px-6 mt-4">
         Footer
     </footer>
    </div>
@@ -234,3 +191,7 @@ const submit = async () => {
 }
 
 </script>
+
+<style>
+
+</style>

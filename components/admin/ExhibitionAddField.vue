@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="addHandler" class="flex flex-col gap-2">
+    <form @submit.prevent="addHandler" class="flex flex-col gap-2 w-96">
           
           <div class="flex items-center gap-4">
             <InputText v-model="inputValue" class="w-96" ref="inputRef" autofocus/>
@@ -7,9 +7,8 @@
               <Button icon='pi pi-check' type="submit"/>
             </div>
           </div>
-          <div class="flex flex-col gap-1">
-            <label>Файл билета</label>
-            <input @change="event => onFileChange(event)" type="file">
+          <div class="flex flex-col gap-1 w-full">
+            <FileInput :file="file" @onChangeFile="onFileChange"/>
         </div>
         </form>
         <Toast/>

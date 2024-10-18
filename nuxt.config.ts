@@ -1,14 +1,15 @@
 export default defineNuxtConfig({
     devtools: { enabled: true },
     ssr:true,
-    modules: ['nuxt-svgo', '@primevue/nuxt-module', '@vee-validate/nuxt', "@nuxt/image", '@pinia/nuxt'],
+    modules: ['nuxt-svgo', '@primevue/nuxt-module', '@vee-validate/nuxt', "@nuxt/image", '@pinia/nuxt', '@nuxt/ui'],
     svgo: {
       defaultImport: 'component',
     },
     css: ['@/assets/scss/main.scss', '~/assets/css/main.css', 'primeicons/primeicons.css'],
     runtimeConfig:{
       public:{
-        baseUrl: process.env.BASE_URL
+        baseUrl: process.env.BASE_URL,
+        countryKey:process.env.COUNTRY_API_KEY
       }
     },
     postcss: {

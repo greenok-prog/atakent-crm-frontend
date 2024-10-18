@@ -5,14 +5,14 @@ export default defineNuxtPlugin({
     name: 'auth-plugin',
  
     async setup (nuxtApp) {
-        const accessToken = useCookie('refreshToken')
+        const refreshToken = useCookie('refreshToken')
         const {login} = useUserStore()
         
-        if(accessToken.value){
+        if(refreshToken.value){
             const {data} = await useAPI<AuthResponse>('/auth/me', {
                 method:'POST',
                 body:{
-                    access_token:accessToken.value
+                    access_token:refreshToken.value
                 }
             })
             if(data.value){

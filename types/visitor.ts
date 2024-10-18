@@ -15,3 +15,7 @@ export interface Visitor {
     exhibitionId: number;
     exhibiton:    Exhibition;
 }
+export interface Source{
+    id:number,
+    name:string
+}
