@@ -1,9 +1,12 @@
 <template>
-   <div class="main">
-    <div class="container m-auto">
-        <NuxtPage/>
+    <div class="bg-gray-50">
+        <div class=" ">
+            <Header />
+        </div>
+        <main class=" m-auto">
+            <NuxtPage />
+        </main>
     </div>
-   </div>
 </template>
 
 <script lang="ts" setup>
@@ -11,11 +14,7 @@
 </script>
 
 <style lang="css" scoped>
-.main{
-    background-image: url('/visitor_bg.jpg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+main {
+    padding-top: 30px;
 }
-
 </style>

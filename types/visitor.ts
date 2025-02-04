@@ -13,9 +13,30 @@ export interface Visitor {
     qrValue:      string;
     qr:           boolean;
     exhibitionId: number;
-    exhibiton:    Exhibition;
+    exhibition:    Exhibition;
+}
+export interface VisitorCreate{
+    name:         string;
+    phone:        string;
+    email:        string;
+    fair:         string;
+    executor:     'individual' | 'company';
+    country:      string;
+    companyName:  string;
+    exhibitionId: number;
+    exhibition:    Exhibition;
 }
 export interface Source{
     id:number,
     name:string
+}
+export interface VisitorStatisticsField{
+    name:String,
+    count:String
+}
+
+export interface VisitorWithStatistics{
+    visitors:Visitor[],
+    fairStatistics: VisitorStatisticsField[],
+    exhibitionStatistics: VisitorStatisticsField[]
 }

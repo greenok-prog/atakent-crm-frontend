@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col">
-        <label v-if="label">{{ label }}</label>
+        <label  class="text-sm" v-if="label">{{ label }}</label>
         <InputMask  :mask="'+7 (999) 999 99 99'" v-bind="$attrs"  v-model="model"  />
         <small v-show="errorMessage" class="text-red-500">{{ errorMessage }}</small>
     </div>

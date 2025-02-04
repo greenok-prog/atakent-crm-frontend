@@ -16,6 +16,7 @@
     "@primevue/themes": "^4.0.0-rc.2",
     "@vee-validate/nuxt": "^4.13.1",
     "@vee-validate/yup": "^4.13.1",
+    "chart.js": "^4.4.7",
     "jspdf": "^2.5.1",
     "nuxt": "^3.11.2",
     "nuxt-svgo": "^4.0.1",
@@ -28,6 +29,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@iconify-json/ic": "^1.2.2",
     "@primevue/nuxt-module": "^4.0.0-rc.2",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",

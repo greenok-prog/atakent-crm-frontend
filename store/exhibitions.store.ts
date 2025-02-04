@@ -1,47 +1,49 @@
-import type { Exhibition } from "~/types/exhibition"
+import { ExhibitionsService } from "~/services/exhibition.service"
+import type { Exhibition, ExhibitionCreate } from "~/types/exhibition"
 import type { AuthResponse, User } from "~/types/user"
 
-export const useExhibitionsStore = defineStore('exhibitions', {
-    state: () => {
-        return {
-            exhibitions:[] as Exhibition[]
-        } 
-    },
-    actions:{
-        async getExhibitions(){
-            if(this.exhibitions.length){
-                return this.exhibitions
-            }
-            const {data} = await useAPI<Exhibition[]>('/exhibitions')
-            if(data.value){
-                this.exhibitions = data.value
-                return this.exhibitions
-            }
-        },
-        async addExhibition(data:any){
-            const res = await useAPI<Exhibition>('/exhibitions', {
-                method:'POST',
-                body:data
-            })
-            if(res.data.value){
-                this.exhibitions.push(res.data.value)
-            }
-            return res
-        },
-        async removeExhibition(id:number){
-            const res = await useAPI('/exhibitions/'+id, {
-                method:"delete"
-            })
+export const useExhibitionsStore = defineStore('exhibitions', () => {
+    const exhibitions = ref<Exhibition[]>([])
+    const isLoaded = ref(false)
+    const toast = useToast()
+    const exhibitionsService = new ExhibitionsService(toast)
 
-            
-            if(res.status.value === 'success'){
-                this.exhibitions = this.exhibitions.filter(el => el.id !== id)
-            }
-            return res
-            
+    const getExhibitions = async () => {
+        if(isLoaded.value){
+            return
         }
-    },
-    getters:{
-       getExhibitionList: (state) => state.exhibitions
+        const {data} = await exhibitionsService.get()
+        if(data.value){
+            exhibitions.value = data.value
+            isLoaded.value = true
+        }
+    }
+    const removeExhibition = async (id:number) => {
+        const {error} = await exhibitionsService.remove(id)
+        if(!error.value){
+            exhibitions.value = exhibitions.value.filter(el => el.id !== id)
+        }
+    }
+    const addExhibition = async (exhibition:Exhibition) => {
+        const {data} = await exhibitionsService.add(exhibition)
+        if(data.value){
+            console.log(data.value);
+            
+            exhibitions.value.push(data.value)
+        }
+    }
+    const changeExhibition = async (id:number,exhibition:Exhibition) => {
+        const res = await exhibitionsService.change(id, exhibition)
+        
+        return res
+
+    }
+
+    return {
+        exhibitions,
+        getExhibitions,
+        removeExhibition,
+        addExhibition,
+        changeExhibition
     }
 })

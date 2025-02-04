@@ -1,197 +1,121 @@
-<template>
-   <div class="flex flex-col justify-between min-h-svh">
-    
-   <div>
-    <header class="h-16 drop-shadow-xl w-full border bg-black text-white text-lg font-bold flex items-center px-6">
-        Header
-    </header>
-   
-    
-    <div class="flex items-center justify-center min-w-92">
-        <form action="" class="mt-12" @submit.prevent="submit">
-        <h1 class="text-3xl font-bold pb-6">Регистрация участника</h1>
-
-        <div class=" min-h-72 flex flex-col ">
-                <span class="mt-1">Выберите выставку, на которой компания будет учавствовать</span>
-                <Select v-model="exhibitionId" :options="exhibitions" optionLabel="name" optionValue="id" placeholder="Выберите выставку" class="mt-4 max-w-72"/>
-                <div v-if="exhibitionId" class=' flex flex-col gap-4 mt-6  w-full '>
-                        <BaseInput class="w-full" v-model="companyName" v-bind="companyNameAttrs" :error-message="errors.companyName" placeholder="Название компании"/>
-                        <BaseInput v-model="email" v-bind="emailAttrs" :error-message="errors.email" placeholder="Email"/>
-                        <BaseInputMask v-model="companyPhone" v-bind="companyPhoneAttrs" :error-message="errors.companyPhone" placeholder="Номер телефона" />
-                        <FileInput :file="file" label="Загрузить логотип" @onChangeFile="addFile"/>
-                </div>
-                <div class="flex flex-col w-full mt-4">
-                        <h2 class="text-2xl  font-bold">Социальные сети</h2>
-                        <span class="mt-1">Добавьте ссылки на социальные сети</span>
-                        <div class=' flex flex-col gap-4 mt-6 '>
-                            <BaseInput v-model="website" v-bind="websiteAttrs" :error-message="errors.website" placeholder="Сайт"/>
-                            <BaseInput v-model="youtube" v-bind="youtubeAttrs" :error-message="errors.youtube" placeholder="Instagram"/>
-                            <BaseInput v-model="instagram" v-bind="instagramAttrs" :error-message="errors.instagram" placeholder="Youtube"/>
-                            <BaseInput v-model="facebook" v-bind="facebookAttrs" :error-message="errors.facebook" placeholder="Facebook" />
-                        </div>
-                        
-                        <VeeFieldArray name="employees" v-slot="{ fields, push, remove }" >
-                            <div class="flex justify-between items-end" v-for="(field, idx) in fields" :key="field.key" >
-                            <div class="flex gap-3">
-                                <BaseInput v-model="employees[idx].name" label="ФИО" class="w-96" reqired/>
-                                <BaseInput v-model="employees[idx].position" label="Должность" class="w-56" reqired/>
-                            </div>
-                            <Button v-if="!field.isFirst" icon="pi pi-times" @click="remove(idx)"/>
-                        </div>
-                      
-                   
-                    <div class="flex">
-                        <Button label="Добавить участника" icon="pi pi-plus" @click="push({name:'', position:''})" class="mt-4"/>
-                    </div>
-                </VeeFieldArray>
-                    </div>
-                
-              </div>
-      
-</form>
-    </div>
-   </div>
-    <Toast/>
+<script setup lang="ts">
 
 
-    <footer class="h-24 drop-shadow-xl w-full border bg-black text-white text-lg font-bold flex items-center px-6 mt-4">
-        Footer
-    </footer>
-   </div>
-</template>
-
-<script lang="ts" setup>
-import * as yup from 'yup'
-
-
-const {data:exhibitions} = await useAPI('/exhibitions')
-
-const toast = useToast()
-
-const setToast = (status: 'success' | 'error') => {
-    if(status === 'success'){
-        toast.add({life:3000, severity:'success', summary:'Создано', detail:'Запись об участнике успешно создана'})
-    }else{
-        toast.add({life:3000, severity:'error', summary:'Ошибка', detail:'Проверьте верность заполненых полей'})
-    }
-}
-
-const validationSchema = yup.object().shape({
-    exhibitionId:yup.number(),
-    companyName:yup.string().required('Обязательное поле'),
-    email: yup.string().email('Невалидный email').required('Обязательное поле'),
-    companyPhone:yup.string().required('Обязательное поле'),
-    website:yup.string(),
-    instagram:yup.string(),
-    youtube:yup.string(),
-    employees: yup.array().of(
-        yup.object().shape({
-            name:yup.string().required('Обязательное полz'),
-            position:yup.string().required('Необходимо добавить хотя бы одного участника')
-        })
-    ).strict()
-    
-    
-})
-
-const {defineField, values, errors, submitForm, validate} = useForm({
-    validationSchema,
-    initialValues:{
-        companyName:'',
-        email: '',
-        companyPhone: '',
-        exhibitionId:'',
-        employees:[{
-            name:'',
-            position:''
-        }],
-        youtube:'',
-        instagram:'',
-        website:'',
-        facebook:''
-    }
-})
-const [companyName, companyNameAttrs] = defineField('companyName')
-const [email, emailAttrs] = defineField('email')
-const [companyPhone, companyPhoneAttrs] = defineField('companyPhone')
-const [exhibitionId] = defineField('exhibitionId')
-const [youtube, youtubeAttrs] = defineField('youtube')
-const [instagram, instagramAttrs] = defineField('instagram')
-const [facebook, facebookAttrs] = defineField('facebook')
-const [website, websiteAttrs] = defineField('website')
-const [employees, employeesAttrs] = defineField('employees')
-
-
-const selectedFiles = ref<HTMLInputElement | null>(null)
-const file = ref<File | undefined>(undefined)
-const fileError = ref('')
-
-const addFile = (event:InputEvent) => {
-    fileError.value = ''
-    if(event.target){
-        const files = event.target?.files
-        let selectedFile = files[0]
-        const fileUrl = URL.createObjectURL(selectedFile)
-
-        const img = new Image()
-
-        img.src = fileUrl
-        img.onload = function(){
-            const width = this.naturalWidth
-            const height = this.naturalHeight
-        }
-
-        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i
-        
-        if(!allowedExtensions.exec(selectedFile.name)){
-            fileError.value = 'Необходимо загрузить картинку'
-            return 
-        }
-        file.value = selectedFile
-    }
-}
-
-const submit = async () => {
-    const isValidForm = (await validate()).valid
-    console.log(errors.value);
-    
-    
-    if(isValidForm){
-        const formData = new FormData()
-        formData.append('logo',file.value)
-        const requestData = {
-            ...values,
-            exhibitionId:exhibitionId.value,
-            employees:employees.value,
-        }
-        for (const [key, value] of Object.entries(requestData)) {
-                if (key === 'employees') {
-                    formData.append(key, JSON.stringify(value))
-                } else {
-                    formData.append(key, value as string)
-                }
-            }
-            for (const value of formData.values()) {
-                console.log(value);
-                }
-            
-        const {data} = await useAPI('/exhibitors', {
-            method:'POST',
-            body:formData,
-        })
-        setToast('success')
-    }else{
-        setToast('error')
-    }
-    
-    
-    
-  
-    
-}
 
 </script>
 
-<style>
+<template>
+    <div class="w-full ">
+        <div class="w-full h-[32rem] bg-cover  bg-[url(/exhibition-1.jpg)] custom-bg relative ">
+            <div class="container m-auto py-4 relative h-full">
+                <div class="absolute  h-full ">
+                    <div class="h-full w-full flex  justify-center flex-col">
+                        <h1 class="text-white text-4xl font-bold  mb-6"><span class="text-indigo-500">Организация</span>
+                            и <span class="text-indigo-500">проведение</span>
+                            выставок, <br>
+                            ярмарок и конференций</h1>
+                        <span class="text-white text-lg">Международная выставочная компания «Атакент-Экспо» — дочернее
+                            предприятие
+                            <br>АО КЦДС «Атакент»,
+                            успешно осуществляет свою деятельность с 1995 года <br> и на сегодняшний день является одной
+                            из
+                            ведущих компаний в сфере выставочного бизнеса. </span>
+                        <div class="block mt-10 flex gap-4">
+                            <Button label="Календарь выставок" class=" w-48" />
+                            <Button label="Получить билет" class=" w-48" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container m-auto">
+            <section class="mt-10">
+                <div class="flex items-center justify-between w-full border-b pb-2">
+                    <h1 class="font-bold text-3xl text-gray-700">Наши выставки</h1>
+                    <Button>
+                        Все выставки
+                        <Icon name="ic:baseline-arrow-forward" />
+                    </Button>
+                </div>
+                <div class="grid grid-cols-6 mt-6 gap-8" v-if="exhibitions">
+                    <ExhibitionCard v-for="i in exhibitions" :exhibition="i" :key="i" />
 
+                </div>
+            </section>
+            <section
+                class=" mt-10 bg-indigo-500 w-full bg-center object-contain bg-cover  bg-[url(/booth-stand.jpg)] bg-no-repeat">
+                <div class="text-white px-10 py-12">
+                    <h2 class="text-3xl font-bold">Строительство выставочных <br> стендов</h2>
+                    <p class="mt-4">Компания предоставляет полный комплекс услуг и работ для организации выставочного
+                        пространства:
+                        <br>
+                        дизайн, проектирование, изготовление, оформление и монтаж стендов любой сложности; <br>
+                        предоставление в аренду аудио-, видео-, проекционного, презентационного и прочего необходимого
+                        <br>
+                        выставочного оборудования не только на территории КЦДС «Атакент», но и по всему Казахстану.
+                    </p>
+                    <Button class="mt-8">Оставить заявку</Button>
+                </div>
+            </section>
+            <section class="mt-10">
+                <h1 class="font-bold text-3xl text-gray-700">Посетителям</h1>
+                <div
+                    class="grid grid-cols-5 gap-8 mt-4 rounded-xl inset-shadow-2xs shadow-2xl inset-shadow-sm py-4 px-2 items-center">
+                    <p class="col-span-4   ">Организаторы выставок предлагают
+                        заранее
+                        заполнить регистрационную форму и
+                        получить бесплатный
+                        электронный пригласительный билет.
+                        Предварительная регистрация избавит от необходимости стоять в очереди и позволит сэкономить
+                        время.
+                        <span class="block font-bold mt-2">* Вы можете зарегестрироваться на нашем сайте или
+                            воспользоваться чат
+                            ботов Whatsapp
+                        </span>
+                    </p>
+                    <div class=" col-span-1   text-center flex flex-col items-center justify-between">
+                        <Button class="flex items-center">Регистрация на сайте
+                            <Icon name="ic:baseline-arrow-forward" />
+                        </Button>
+                        <Button
+                            class="block mt-2 bg-green-500 border-none flex items-center hover:border-none not(:disabled):hover:bg-green-500">Регистрация
+                            Whatsapp
+                            <NuxtImg class="w-5" src="icons/whatsapp-icon.svg" alt="" />
+                        </Button>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+        <footer class="mt-12 bg-indigo-500 h-48 w-full">
+            <div class="container m-auto text-white">footer</div>
+        </footer>
+    </div>
+</template>
+<script lang="ts" setup>
+import { useExhibitionsStore } from '~/store/exhibitions.store';
+import {ExhibitionsService} from '~/services/exhibition.service.ts'
+
+const { getExhibitions } = useExhibitionsStore()
+const { exhibitions } = storeToRefs(useExhibitionsStore())
+const exhibitionsService = new ExhibitionsService()
+
+
+await getExhibitions()
+
+
+
+</script>
+<style lang="scss" scoped>
+.custom-bg::before {
+    background-color: rgba(0, 0, 0, 0.562);
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    width: 100%;
+}
 </style>

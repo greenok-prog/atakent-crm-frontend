@@ -1,43 +1,46 @@
 <template>
-    <div>
+    <div class="bg-transparent">
         <NuxtLink to="/admin/managers/add">
-            <Button label="Добавить менеджера"/>
+            <Button label="Добавить менеджера" />
         </NuxtLink>
-        <DataTable :value="data">
-        <Column field="name" header="Имя"></Column>
-        <Column field="email" header="Email"></Column>
-        <Column field="roles" header="Роли"></Column>
+        <DataTable :value="data" class="bg-transparent" scrollable>
+            <Column style="min-width: 600px" field="name" header="Имя"></Column>
+            <Column style="min-width: 600px" field="email" header="Email"></Column>
+            <Column style="min-width: 600px" field="roles" header="Роли"></Column>
+            <Column style="min-width: 600px" field="1" header="Роли"></Column>
+            <Column style="min-width: 600px" field="2" header="Роли"></Column>
+            <Column style="min-width: 600px" field="3" header="Роли"></Column>
 
-        <Column>
-            <template #body="slotProps" >
-                <div class="flex gap-2 items-center justify-end">
-                   <NuxtLink :to="`/admin/managers`"><Button icon="pi pi-pencil" /></NuxtLink>
-                    <Button @click="removeManager(slotProps.data.id)" icon="pi pi-times" />
-                    
-                </div>
-            </template>
-        </Column>
-    </DataTable>
+            <Column style="min-width: 600px">
+                <template #body="slotProps">
+                    <div class="flex gap-2 items-center justify-end">
+                        <NuxtLink :to="`/admin/managers`"><Button icon="pi pi-pencil" /></NuxtLink>
+                        <Button @click="removeManager(slotProps.data.id)" icon="pi pi-times" />
+
+                    </div>
+                </template>
+            </Column>
+        </DataTable>
     </div>
 
 </template>
 
 <script lang="ts" setup>
-definePageMeta({
-  layout: 'admin-layout',
-  middleware:['auth','admin']
-})
-
-const {data} = await useAPI('/users')
-const removeManager = async (id:number) => {
-    const {data, error, refresh} = await useAPI(`/users/${id}`, {
-        method:'DELETE'
+    definePageMeta({
+        layout: 'admin-layout',
+        middleware: ['auth', 'admin']
     })
-    if(!error.value){
-        refresh()
+
+    const { data } = await useAPI('/users')
+    const removeManager = async (id: number) => {
+        const { data, error, refresh } = await useAPI(`/users/${id}`, {
+            method: 'DELETE'
+        })
+        if (!error.value) {
+            refresh()
+        }
+
+
     }
-    
-    
-}
 
 </script>
