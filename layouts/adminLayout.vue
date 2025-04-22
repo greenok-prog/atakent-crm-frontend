@@ -1,17 +1,25 @@
 <template>
-    <div class="flex min-h-svh bg-indigo-50 ">
-
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
         <AdminLayoutSidebar />
 
-        <div class="flex flex-col grow container">
-            <main class="overflow-hidden ">
-                <div class=" py-6 px-4 overflow-hidden">
-                    <NuxtPage />
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top bar -->
+            <!-- <header class="bg-white shadow-sm z-10">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                    <h1 class="text-lg font-semibold text-gray-900">{{ currentPage }}</h1>
                 </div>
+            </header> -->
+
+            <!-- Page content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <NuxtPage />
             </main>
         </div>
     </div>
-
 </template>
-<script lang="ts" setup></script>
-<style lang="scss" scoped></style>
+
+<script setup>
+
+</script>

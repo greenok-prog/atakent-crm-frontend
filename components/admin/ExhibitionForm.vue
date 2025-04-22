@@ -3,7 +3,7 @@
         <BaseInput :disabled="!isEditing" v-model="name" v-bind="nameAttrs" class="w-full grow"
             placeholder="Название" />
         <div v-if="isEditing" class="flex flex-col gap-2 mt-2">
-            <BaseInput v-model="description" v-bind="descriptionAttrs" class="w-full" placeholder="Описание"
+            <Textarea v-model="description" v-bind="descriptionAttrs" class="w-full" placeholder="Описание"
                 :errorMessage="errors.description" />
             <BaseInput v-model="location" v-bind="locationAttrs" class="w-full" placeholder="Место проведения" />
             <Select v-model="organizer_id" :options="organizers" optionLabel="name" optionValue="id"
@@ -35,6 +35,9 @@
         isEditing?: boolean
     }>()
     const { organizers } = storeToRefs(useOrganizersStore())
+    const { getOrganizers } = useOrganizersStore()
+
+    await getOrganizers()
     const initialValues = computed(() => {
         if (exhibition) {
             return {
@@ -43,7 +46,7 @@
                 dateEnd: new Date(exhibition?.dateEnd) ?? '',
                 dateStart: new Date(exhibition.dateStart) ?? '',
                 location: exhibition.location ?? '',
-                organizer_id: exhibition.organizer.id ?? ''
+                organizer_id: exhibition.organizer_id ?? ''
             }
         }
         else {

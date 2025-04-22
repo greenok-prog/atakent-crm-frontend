@@ -35,6 +35,7 @@ export class SourcesService{
                 }
                 
             }
+        return res
     }
     async add(name:string, options:RequestsOptions){
         if (!name.trim() && this.toast) {
@@ -59,6 +60,29 @@ export class SourcesService{
             if(options.refresh){
                 options.refresh();
             }
+          }
+          return res
+    }
+    async change(id:number,name:string,){
+        if (!name.trim() && this.toast) {
+            this.toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Название организатора не может быть пустым', life: 3000 }); // Уведомление об ошибке
+            return;
+          }
+      
+          const res = await useAPI<Source>(`${API_ROUTES.SOURCES}/${id}`, {
+            method: 'PATCH',
+            body: {
+              name
+            }
+          });
+      
+          if (res.error.value && this.toast) {
+            this.toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Ошибка при изменении организатора', life: 3000 }); // Уведомление об ошибке
+          } else {
+           if(this.toast){
+            this.toast.add({ severity: 'success', summary: 'Успех', detail: 'Организатор успешно изменен', life: 3000 }); // Уведомление об успехе
+           }
+            
           }
           return res
     }

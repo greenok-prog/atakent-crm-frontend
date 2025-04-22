@@ -54,13 +54,16 @@
                                             @click="push({ name: '', position: '' })" class="mt-4" />
                                     </div>
                                 </VeeFieldArray>
+                                <Button label="Регистрация" @click="submit" />
                             </div>
                         </div>
 
                     </div>
 
                 </form>
+
             </div>
+
         </div>
 
 
@@ -71,21 +74,18 @@
 
 <script lang="ts" setup>
     import * as yup from 'yup'
+    import { useExhibitionsStore } from '~/store/exhibitions.store'
+    import { useExhibitorsStore } from '~/store/exhibitor.store'
     definePageMeta({
         layout: 'form-layout'
     })
+    const { getExhibitions } = useExhibitionsStore()
+    const { exhibitions } = storeToRefs(useExhibitionsStore())
 
-    const { data: exhibitions } = await useAPI('/exhibitions')
+    const { addExhibitor } = useExhibitorsStore()
 
-    const toast = useToast()
 
-    const setToast = (status: 'success' | 'error') => {
-        if (status === 'success') {
-            toast.add({ life: 3000, severity: 'success', summary: 'Создано', detail: 'Запись об участнике успешно создана' })
-        } else {
-            toast.add({ life: 3000, severity: 'error', summary: 'Ошибка', detail: 'Проверьте верность заполненых полей' })
-        }
-    }
+    await getExhibitions()
 
     const validationSchema = yup.object().shape({
         exhibitionId: yup.number(),
@@ -105,7 +105,7 @@
 
     })
 
-    const { defineField, values, errors, submitForm, validate } = useForm({
+    const { defineField, values, errors, resetForm, validate } = useForm({
         validationSchema,
         initialValues: {
             companyName: '',
@@ -138,39 +138,35 @@
     const fileError = ref('')
 
     const addFile = (event: InputEvent) => {
-        fileError.value = ''
-        if (event.target) {
-            const files = event.target?.files
-            let selectedFile = files[0]
-            const fileUrl = URL.createObjectURL(selectedFile)
+        fileError.value = '';
+        const target = event.target as HTMLInputElement; // Приведение типа
+        if (target && target.files) {
+            const files = target.files;
+            const selectedFile = files[0];
+            const fileUrl = URL.createObjectURL(selectedFile);
 
-            const img = new Image()
+            const img = new Image();
+            img.src = fileUrl;
 
-            img.src = fileUrl
-            img.onload = function () {
-                const width = this.naturalWidth
-                const height = this.naturalHeight
-            }
-
-            const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i
-
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
             if (!allowedExtensions.exec(selectedFile.name)) {
-                fileError.value = 'Необходимо загрузить картинку'
-                return
+                fileError.value = 'Необходимо загрузить картинку';
+                return;
             }
-            file.value = selectedFile
+
+            file.value = selectedFile;
         }
-    }
+    };
 
     const submit = async () => {
         const isValidForm = (await validate()).valid
-        console.log(errors.value);
-
 
         if (isValidForm) {
             const formData = new FormData()
-            formData.append('logo', file.value)
-            const requestData = {
+            if (file.value) {
+                formData.append('logo', file.value)
+            }
+            const requestData: any = {
                 ...values,
                 exhibitionId: exhibitionId.value,
                 employees: employees.value,
@@ -182,23 +178,11 @@
                     formData.append(key, value as string)
                 }
             }
-            for (const value of formData.values()) {
-                console.log(value);
+            const res = await addExhibitor(requestData)
+            if (!res.error.value) {
+                resetForm()
             }
-
-            const { data } = await useAPI('/exhibitors', {
-                method: 'POST',
-                body: formData,
-            })
-            setToast('success')
-        } else {
-            setToast('error')
         }
-
-
-
-
-
     }
 
 </script>

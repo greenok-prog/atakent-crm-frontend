@@ -23,7 +23,6 @@
     const organizerService = new OrganizerService(toast)
 
 
-
     const addOrganizer = async (name: string) => {
         const resError = organizerService.add(name, {})
         if (!resError) {

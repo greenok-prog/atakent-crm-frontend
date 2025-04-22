@@ -3,7 +3,7 @@ import type { AuthResponse, User } from "~/types/user"
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
-            user:{} as User,
+            user:{} as User | null,
             isLoggedIn:false
         } 
     },
@@ -24,16 +24,16 @@ export const useUserStore = defineStore('user', {
             refresh.value = null
             const accessToken = useCookie('accessToken')
             accessToken.value = null
-            await navigateTo('/')
+            this.user = null
+            await navigateTo('/admin/login')
         }
     },
     getters:{
         userIsAdmin: (state) => {
-            if(state.isLoggedIn){
-                return state.user?.roles.includes('ADMIN')
-            }
-            return false
+            return state.user?.roles.includes('ADMIN')
+           
         },
-        userIsManager: (state) =>state.user ? state.user?.roles.includes('MANAGER') : false
+        userIsAssistant: (state) =>state.user?.roles.includes('ASSISTANT'),
+        userIsManager: (state) =>state.user?.roles.includes('MANAGER')
     }
 })

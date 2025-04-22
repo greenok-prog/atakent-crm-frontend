@@ -20,7 +20,7 @@
     const emit = defineEmits(['onChangeFile'])
     const config = useRuntimeConfig()
     const props = defineProps<{
-        file: File,
+        file?: File,
         error?: string,
         label?: string,
         preloadServer?: string

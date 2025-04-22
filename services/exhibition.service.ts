@@ -4,13 +4,18 @@ import type { Exhibition } from "~/types/exhibition";
 interface RequestsOptions{
     refresh?: (opts?:undefined) => Promise<void>
 }
+export interface GetQueries{
+    main:boolean
+}
 export class ExhibitionsService{
     private toast?: ToastServiceMethods;
     constructor (toast? : ToastServiceMethods){
         this.toast = toast
     }
-    async get(){
-        const res = await useAPI<Exhibition[]>(API_ROUTES.EXHIBITIONS)
+    async get(query?:GetQueries){
+        const res = await useAPI<Exhibition[]>(API_ROUTES.EXHIBITIONS, {
+            query:query
+        })
         return res
     }
     async add(exhibition:Exhibition, options?:RequestsOptions){

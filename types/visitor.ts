@@ -7,7 +7,7 @@ export interface Visitor {
     email:        string;
     fair:         string;
     date:         Date;
-    executor:     'individual' | 'company';
+    executor:     string;
     country:      string;
     companyName:  string;
     qrValue:      string;
@@ -20,11 +20,11 @@ export interface VisitorCreate{
     phone:        string;
     email:        string;
     fair:         string;
-    executor:     'individual' | 'company';
+    executor:     string;
     country:      string;
     companyName:  string;
     exhibitionId: number;
-    exhibition:    Exhibition;
+    exhibition:    number;
 }
 export interface Source{
     id:number,
@@ -39,4 +39,7 @@ export interface VisitorWithStatistics{
     visitors:Visitor[],
     fairStatistics: VisitorStatisticsField[],
     exhibitionStatistics: VisitorStatisticsField[]
+    qrStats:number,
+    individualCount: number,
+    companyCount:number
 }

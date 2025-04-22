@@ -4,14 +4,11 @@
             <Button label="Добавить менеджера" />
         </NuxtLink>
         <DataTable :value="data" class="bg-transparent" scrollable>
-            <Column style="min-width: 600px" field="name" header="Имя"></Column>
-            <Column style="min-width: 600px" field="email" header="Email"></Column>
-            <Column style="min-width: 600px" field="roles" header="Роли"></Column>
-            <Column style="min-width: 600px" field="1" header="Роли"></Column>
-            <Column style="min-width: 600px" field="2" header="Роли"></Column>
-            <Column style="min-width: 600px" field="3" header="Роли"></Column>
+            <Column style="min-width: 300px" field="name" header="Имя"></Column>
+            <Column style="min-width: 300px" field="email" header="Email"></Column>
+            <Column style="min-width: 300px" field="roles" header="Роли"></Column>
 
-            <Column style="min-width: 600px">
+            <Column style="min-width: 300px">
                 <template #body="slotProps">
                     <div class="flex gap-2 items-center justify-end">
                         <NuxtLink :to="`/admin/managers`"><Button icon="pi pi-pencil" /></NuxtLink>

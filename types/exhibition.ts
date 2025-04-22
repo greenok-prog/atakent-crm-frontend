@@ -5,10 +5,12 @@ export interface Exhibition{
     description:string,
     dateStart:Date,
     dateEnd:Date,
-    image?: File,
+    image?: string,
     location:string
     id:number
-    organizer:Organizer
+    organizer:Organizer,
+    organizer_id:number,
+    website?:string
 }
 
 

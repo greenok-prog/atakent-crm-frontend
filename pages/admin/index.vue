@@ -1,14 +1,12 @@
 <template>
-   <div @click="">
-    fdf
-   </div>
+  <div>Админ панель</div>
 </template>
 
 <script lang="ts" setup>
-definePageMeta({
-  layout: 'admin-layout',
-  middleware:'auth',
-})
+  definePageMeta({
+    layout: 'admin-layout',
+    middleware: 'auth',
+  })
 
 
 

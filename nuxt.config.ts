@@ -1,21 +1,62 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr:true,
-  modules: ['nuxt-svgo', '@primevue/nuxt-module', '@vee-validate/nuxt', "@nuxt/image", '@pinia/nuxt', '@nuxt/ui'],
+  modules: [
+    'nuxt-svgo',
+    '@primevue/nuxt-module',
+    '@vee-validate/nuxt',
+    "@nuxt/image",
+    '@pinia/nuxt',
+    '@nuxt/ui',
+    'nuxt-lucide-icons',
+    'nuxt-aos',
+  ],
 
   svgo: {
     defaultImport: 'component',
   },
+  
+  imports: {
+    
+  },
+  experimental: {
+    viewTransition: true,
+    renderJsonPayloads: true
+  },
+  nitro: {
+    compressPublicAssets: true,
+    devProxy: {
+      '/_nuxt/': 'http://localhost:3000'
+    }
+  },
 
   css: ['@/assets/scss/main.scss', '~/assets/css/main.css', 'primeicons/primeicons.css'],
-
+  aos: {
+    // Global settings
+    disable: false,
+    startEvent: 'DOMContentLoaded',
+    initClassName: 'aos-init',
+    animatedClassName: 'aos-animate',
+    useClassNames: false,
+    disableMutationObserver: false,
+    debounceDelay: 50,
+    throttleDelay: 99,
+    
+    // Settings that can be overridden per element
+    offset: 120,
+    delay: 0,
+    duration: 800,
+    easing: 'ease',
+    once: false,
+    mirror: false,
+    anchorPlacement: 'top-bottom'
+  },
   runtimeConfig:{
     public:{
       baseUrl: process.env.BASE_URL,
       countryKey:process.env.COUNTRY_API_KEY
     }
   },
-
   postcss: {
     plugins: {
       tailwindcss: {},

@@ -52,7 +52,7 @@
         formData.append('website', 'fsdfsdfsdf')
         formData.append('organizer', String(formValues.organizer_id))
         // Отправка данных на сервер
-        const res = await changeExhibition(exhibition.id, formValues)
+        const res = await changeExhibition(exhibition.id, formData)
         if (!res.error.value) {
             isEditing.value = false
         }

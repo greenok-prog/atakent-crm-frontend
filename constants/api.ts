@@ -1,5 +1,7 @@
 export const API_ROUTES = {
     SOURCES: '/sources',
     EXHIBITIONS: '/exhibitions',
-    ORGANIZERS: '/organizers'
+    ORGANIZERS: '/organizers',
+    VISITORS: '/visitors',
+    EXHIBITORS: '/exhibitors'
 }

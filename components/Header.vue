@@ -1,77 +1,61 @@
-<script setup lang="ts">
-	const isActive = ref(false)
-</script>
-
-
-
 <template>
-	<header class="bg-white">
-		<nav class="relative  py-4 flex justify-between items-center  container m-auto">
-			<a class="text-3xl font-bold leading-none w-24" href="#">
-				<NuxtImg src="atakent-logo.svg" />
-			</a>
-			<div class="lg:hidden" @click="isActive = true">
-				<button class="navbar-burger flex items-center text-blue-600 p-3">
-					<svg class="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-						<title>Mobile menu</title>
-						<path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-					</svg>
-				</button>
-			</div>
-			<ul
-				class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
-				<li>
-					<NuxtLink class="text-sm text-gray-400 hover:text-gray-500" to="/">Главная</NuxtLink>
-				</li>
-				<li class="text-gray-300">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-						class="w-4 h-4 current-fill" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-					</svg>
-				</li>
-				<li>
-					<NuxtLink class="text-sm text-gray-400 hover:text-gray-500" to="/visitor">Получить билет</NuxtLink>
-				</li>
-				<li class="text-gray-300">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-						class="w-4 h-4 current-fill" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-					</svg>
-				</li>
-				<li>
-					<NuxtLink class="text-sm text-gray-400 hover:text-gray-500" to="/exhibitor">Забронировать стенд
-					</NuxtLink>
-				</li>
-				<li class="text-gray-300">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-						class="w-4 h-4 current-fill" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-					</svg>
-				</li>
+	<header class="fixed w-full bg-white/95 backdrop-blur-sm shadow-md z-50">
+		<div class="flex w-full">
+			<nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+				<NuxtLink to="/" class="flex items-center space-x-2">
 
-				<li>
-					<NuxtLink class="text-sm text-gray-400 hover:text-gray-500" to="/contacts">Контакты</NuxtLink>
-				</li>
-			</ul>
-			<Button
-				class="hidden lg:inline-block py-2 px-6  text-sm text-white font-bold rounded-xl transition duration-200">
-				<NuxtLink to="/admin/login">Войти</NuxtLink>
-			</Button>
-		</nav>
-		<BurgerMenu :isActive />
+					<Icon name='lucide:building-2' class="h-8 w-8 text-blue-900" />
+
+					<span class="text-2xl font-bold text-blue-900">Атакент-Экспо</span>
+
+				</NuxtLink>
+				<div class="hidden md:flex space-x-6">
+					<NuxtLink v-for="link in links" :key="link.label"
+						class="text-gray-700 hover:text-blue-900 transition-colors" :to="link.to">{{ link.label }}
+					</NuxtLink>
+				</div>
+
+			</nav>
+			<button class="md:hidden block" @click="isMenuOpen = !isMenuOpen">
+				<LucideMenu class="h-6 w-6 text-blue-900" />
+			</button>
+		</div>
+		<!-- Mobile menu -->
+		<div v-if="isMenuOpen" class="md:hidden bg-white border-t">
+			<div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+				<NuxtLink v-for="link in links" :key="link.label"
+					class="text-gray-700 hover:text-blue-900 transition-colors" :to="link.to">{{ link.label }}
+				</NuxtLink>
+
+			</div>
+		</div>
 	</header>
 
 </template>
+<script lang="ts" setup>
+	const isMenuOpen = ref(false)
 
+	const links = [
+		{
+			label: 'Регистрация',
+			to: '/visitor'
+		},
+		{
+			label: 'Портфолио',
+			to: '/#portfolio'
+		},
+		{
+			label: 'Контакты',
+			to: '/contacts'
+		},
+		{
+			label: 'Календарь',
+			to: '/calendar'
+		}
+	]
+</script>
 <style>
-.router-link-active {
-	@apply text-indigo-500 font-bold
-}
-
 .router-link-exact-active {
-	@apply text-indigo-500 font-bold
+	@apply text-blue-700 font-bold
 }
 </style>

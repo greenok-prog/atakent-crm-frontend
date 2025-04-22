@@ -8,4 +8,7 @@
 .p-paginator-page-selected{
     background: #4338ca  !important;
 }
+.p-select-clear-icon{
+    margin-right: 6px;
+}
 

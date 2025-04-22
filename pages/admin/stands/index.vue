@@ -38,7 +38,6 @@
 
 <script lang="ts" setup>
     import type { Exhibitor } from '~/types/exhibitor';
-    import { useToast } from 'primevue/usetoast';
 
 
     definePageMeta({

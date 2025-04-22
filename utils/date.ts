@@ -16,3 +16,14 @@ export function formatExhibitionDate(date:Date, isStart:boolean = true):String {
     }
     
 }
+
+export const exhibitionDateMain = (date:Date) => {
+    const months = [
+        'янв.', 'февр.', 'март', 'апр.', 'май', 'июнь', 
+        'июль', 'авг.', 'сент.', 'окт.', 'нояб.', 'дек.'
+    ];
+    const day = date.getDate()
+    const month = months[date.getMonth()]
+
+    return {day, month}
+}
